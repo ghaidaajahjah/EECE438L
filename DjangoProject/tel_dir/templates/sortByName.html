@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+   <head>
+    <style type="text/css">
+        
+		.sidenav {
+			height:100%;
+			width:250px;
+			position: fixed;
+			z-index:1;
+			top:0;
+			left:0;
+			background-color: palevioletred;
+			overflow-x: hidden;
+			padding-top:20px;
+            margin-right: 100px;
+          
+		}
+ 
+		.sidenav a {
+			padding:30px 10px 6px 16px;
+			text-decoration: none;
+			font-size:15px;
+			color: black;
+			display:block;
+            transition: 0.3s;
+            font-weight: bold;
+            text-align: center
+		}
+ 
+		.sidenav a:hover{
+			color: whitesmoke;
+		}	
+ 
+        .column{
+            margin-left:290px ;
+            width: 80%;
+        }
+ 
+	</style>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--Bootstrap CSS-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+ 
+  </head>
+
+
+ 
+  <body>
+      {% load crispy_forms_tags %}
+
+      
+   
+      <div class="sidenav">
+        <a href="/" style="font-size: 30px">HOME</a>
+        <a href="{% url 'tel_dir:searchByName' %}">Search by Contact Name</a>
+        <a href="{% url 'tel_dir:searchByTel' %}">Search by Telephone Number</a>
+        <a href="{% url 'tel_dir:searchByProfession' %}">Search by Profession</a>
+        <a href="{% url 'tel_dir:compare' %}">Compare Two Contacts</a>
+        <a href="{% url 'tel_dir:sortByName' %}">Sort by Name</a>
+        <a href="{% url 'tel_dir:sortByProfession' %}">Sort by Profession</a>
+      </div>
+  
+    <div class="column">
+     
+        <nav class="navbar navbar-light bg-light">
+            <a class="navbar-brand mx-auto" href="">
+              Contacts Sorted By Name
+            </a>
+          </nav>
+          
+      <br><br>
+      <div class="container">
+        {% for contact in contacts %}
+        <div class="card" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title">{{ contact.name }}</h5>
+            <p class="card-text">{{ contact.tel1 }}</p>
+            <p class="card-text">{{ contact.tel2 }}</p>
+            <p class="card-text">{{ contact.profession }}</p>
+            <!-- <button class ="btn btn-primary"   type="submit" id= "delete">Delete</button> -->
+
+            <div class="row">
+            <form action="{% url 'tel_dir:deleteContact' contact.tel1 %}" method="post">
+                {% csrf_token %}
+                <button class ="btn"  style="background:palevioletred ;color:white;margin: 10px" type="submit" >Delete</button>
+            </form>
+
+            <form action="{% url 'tel_dir:updateContact' contact.tel1 %}" method="get">
+                {% csrf_token %}
+                <button class ="btn"  style="background:#9E9E9E ;color:white;margin: 10px" type="submit" >Update</button>
+            </form>
+        </div>
+            <!-- <button class ="btn btn-primary" href="delete/{{ contact.tel1 }}">Delete</button> -->
+
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+  </body>
+</html>
